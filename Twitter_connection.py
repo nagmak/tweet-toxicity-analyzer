@@ -23,18 +23,24 @@ auth.set_access_token(ACCESS_TOKEN, ACCESS_SECRET)
 api = tweepy.API(auth, wait_on_rate_limit=True, wait_on_rate_limit_notify=True, compression=True)
 
 abusive_words = 'fuck OR bitch OR cunt OR dumb OR ugly OR useless OR ignored OR rumors OR spread OR teased OR crying OR bullying OR abuse OR hit OR neglect OR hate OR racist OR die OR kill OR hurt'
+positive_words = 'happy OR great OR good OR proud OR joy OR friends OR family OR confident OR love OR peace OR fine OR important'
 
 abusive_words.replace(" ", "%20")
+positive_words.replace(" ", "%20")
 
+positive_tweets = tweepy.Cursor(api.search, q=positive_words, tweet_mode='extended', count=100)
 public_tweets = tweepy.Cursor(api.search, q=abusive_words, tweet_mode='extended', count=100)
 api.home_timeline()
 count = 0
-for tweet in public_tweets.items(100):
+for tweet, p_tweet in zip(public_tweets.items(100), positive_tweets.items(100)):
     # print(tweet.text)
     if tweet.lang == "en":
         print(count)
-        print(tweet.full_text)
+        print('Negative',tweet.full_text)
+        print('Positive', p_tweet.full_text)
+
         count = count + 1
+
 
 # ---------------------------------------------------------------------------------------------------------------------
 # Twitter API development use pagination for Iterating through timelines, user lists, direct messages, etc.
