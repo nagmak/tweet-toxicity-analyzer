@@ -42,13 +42,14 @@ api.home_timeline()
 count = 0
 for tweet, p_tweet in zip(negative_tweets.items(1000), positive_tweets.items(1000)):
     # print(tweet.text)
-    if tweet.lang == "en":
-        # nfull_text = p.clean(tweet.full_text)
-        # pfull_test = p.clean(p_tweet.full_text)
+    if tweet.lang == "en" and p_tweet.lang == "en":
+        print(count)
         # Write a row to the CSV file. I use encode UTF-8
         csvWriter.writerow([tweet.created_at, tweet.full_text])
+        print("Negative",tweet.created_at, tweet.full_text)
+
         csvWriter.writerow([p_tweet.created_at, p_tweet.full_text])
-        # print(tweet.created_at, tweet.full_text)
+        print("Positive", p_tweet.created_at, p_tweet.full_text)
         count = count + 1
 
 csvFile.close()
