@@ -88,10 +88,11 @@ for tweet, p_tweet in zip(negative_tweets.items(1000), positive_tweets.items(100
         p_tweet.full_text = normalization(p_tweet.full_text)
 
         # Write a row to the CSV file. I use encode UTF-8
-        csvWriter.writerow([tweet.created_at, tweet.full_text])
+        # Cols: Created At, Tweets Array, Positive/Negative
+        csvWriter.writerow([tweet.created_at, tweet.full_text, 1])
         print("Negative",tweet.created_at, tweet.full_text)
 
-        csvWriter.writerow([p_tweet.created_at, p_tweet.full_text])
+        csvWriter.writerow([p_tweet.created_at, p_tweet.full_text, 0])
         print("Positive", p_tweet.created_at, p_tweet.full_text)
         count = count + 1
 
