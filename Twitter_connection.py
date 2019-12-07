@@ -41,7 +41,9 @@ positive_words.replace(" ", "%20")
 csvFile = open('tweets.csv', 'a')
 
 #Use csv writer
-csvWriter = csv.writer(csvFile)
+csvWriter = csv.DictWriter(
+    csvFile, fieldnames=["created_at", "tweet_text", "sentiment"])
+csvWriter.writeheader()
 
 positive_tweets = tweepy.Cursor(api.search, q=positive_words, tweet_mode='extended', count=1000)
 negative_tweets = tweepy.Cursor(api.search, q=negative_words, tweet_mode='extended', count=1000)
@@ -89,10 +91,9 @@ for tweet, p_tweet in zip(negative_tweets.items(1000), positive_tweets.items(100
 
         # Write a row to the CSV file. I use encode UTF-8
         # Cols: Created At, Tweets Array, Positive/Negative
-        csvWriter.writerow([tweet.created_at, tweet.full_text, 1])
+        csvWriter.writerow({'created_at': tweet.created_at, 'tweet_text': tweet.full_text, 'sentiment': 1})
         print("Negative",tweet.created_at, tweet.full_text)
-
-        csvWriter.writerow([p_tweet.created_at, p_tweet.full_text, 0])
+        csvWriter.writerow({'created_at': p_tweet.created_at, 'tweet_text': p_tweet.full_text, 'sentiment': 1})
         print("Positive", p_tweet.created_at, p_tweet.full_text)
         count = count + 1
 
