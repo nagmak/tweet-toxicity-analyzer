@@ -104,6 +104,7 @@ for tweet, p_tweet in zip(negative_tweets.items(1000), positive_tweets.items(100
 
 csvFile.close()
 
+
 for tweet, p_tweet in zip(negative_tweets.items(1000), positive_tweets.items(1000)):
     # print(tweet.text)
     if tweet.lang == "en" and p_tweet.lang == "en":
