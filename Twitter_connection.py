@@ -39,11 +39,16 @@ positive_words.replace(" ", "%20")
 
 # Open/create a file to append data to
 csvFile = open('tweets.csv', 'a')
+csvTestFile = open('test_tweets.csv', 'a')
 
 #Use csv writer
 csvWriter = csv.DictWriter(
     csvFile, fieldnames=["created_at", "tweet_text", "sentiment"])
 csvWriter.writeheader()
+
+csvWriter2 = csv.DictWriter(
+    csvTestFile, fieldnames=["created_at", "tweet_text"])
+csvWriter2.writeheader()
 
 positive_tweets = tweepy.Cursor(api.search, q=positive_words, tweet_mode='extended', count=1000)
 negative_tweets = tweepy.Cursor(api.search, q=negative_words, tweet_mode='extended', count=1000)
@@ -93,13 +98,38 @@ for tweet, p_tweet in zip(negative_tweets.items(1000), positive_tweets.items(100
         # Cols: Created At, Tweets Array, Positive/Negative
         csvWriter.writerow({'created_at': tweet.created_at, 'tweet_text': tweet.full_text, 'sentiment': 1})
         print("Negative",tweet.created_at, tweet.full_text)
-        csvWriter.writerow({'created_at': p_tweet.created_at, 'tweet_text': p_tweet.full_text, 'sentiment': 1})
+        csvWriter.writerow({'created_at': p_tweet.created_at, 'tweet_text': p_tweet.full_text, 'sentiment': 0})
         print("Positive", p_tweet.created_at, p_tweet.full_text)
         count = count + 1
 
 csvFile.close()
 
+for tweet, p_tweet in zip(negative_tweets.items(1000), positive_tweets.items(1000)):
+    # print(tweet.text)
+    if tweet.lang == "en" and p_tweet.lang == "en":
+        print(count)
 
+        # Removing punctuation
+        tweet.full_text = form_sentence(tweet.full_text)
+        p_tweet.full_text = form_sentence(p_tweet.full_text)
+
+        # Removing stopwords: is, are, have - increases efficiency
+        tweet.full_text = no_user_alpha(tweet.full_text)
+        p_tweet.full_text = no_user_alpha(p_tweet.full_text)
+
+        # Normalizing
+        tweet.full_text = normalization(tweet.full_text)
+        p_tweet.full_text = normalization(p_tweet.full_text)
+
+        # Write a row to the CSV file. I use encode UTF-8
+        # Cols: Created At, Tweets Array, Positive/Negative
+        csvWriter2.writerow({'created_at': tweet.created_at, 'tweet_text': tweet.full_text})
+        print("Negative",tweet.created_at, tweet.full_text)
+        csvWriter2.writerow({'created_at': p_tweet.created_at, 'tweet_text': p_tweet.full_text})
+        print("Positive", p_tweet.created_at, p_tweet.full_text)
+        count = count + 1
+
+csvTestFile.close()
 
 # ---------------------------------------------------------------------------------------------------------------------
 # Twitter API development use pagination for Iterating through timelines, user lists, direct messages, etc.
