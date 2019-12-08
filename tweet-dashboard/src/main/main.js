@@ -1,7 +1,8 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
-import SimpleCard from '../components/card/card'
+import PieChartCard from '../components/card/pie-chart-card'
+import BarChartCard from '../components/card/bar-chart-card';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -21,16 +22,16 @@ export default function CenteredGrid() {
     <div className={classes.root}>
       <Grid container spacing={3}>
         <Grid item xs={6}>
-            <SimpleCard></SimpleCard>
+            <PieChartCard></PieChartCard>
         </Grid>
         <Grid item xs={6}>
-            <SimpleCard></SimpleCard>
+            <BarChartCard></BarChartCard>
         </Grid>
         <Grid item xs={6}>
-            <SimpleCard></SimpleCard>
+            <PieChartCard></PieChartCard>
         </Grid>
         <Grid item xs={6}>
-            <SimpleCard></SimpleCard>
+            <BarChartCard></BarChartCard>
         </Grid>
       </Grid>
     </div>
