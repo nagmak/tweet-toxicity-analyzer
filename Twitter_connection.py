@@ -18,6 +18,9 @@ import nltk
 from nltk.corpus import stopwords
 from nltk.stem.wordnet import WordNetLemmatizer
 
+# Sentiment analyzer
+from nltk.sentiment.vader import SentimentIntensityAnalyzer
+
 ACCESS_TOKEN = '772178815414050816-KeN292eY2t0TDNC6h3EpK7VR1qIBKgK'
 ACCESS_SECRET = '1iohtKtnbAs3qHryyhgIHU2hLSaTofjx6bbq7jam698QZ'
 CONSUMER_KEY = '1SlOCtMrdZBdbKmhsPje5A3mQ'
@@ -43,7 +46,7 @@ csvTestFile = open('test_tweets.csv', 'a')
 
 #Use csv writer
 csvWriter = csv.DictWriter(
-    csvFile, fieldnames=["created_at", "tweet_text", "sentiment"])
+    csvFile, fieldnames=["created_at", "tweet_text", "sentiment", "neg", "neu", "pos", "compound"])
 csvWriter.writeheader()
 
 csvWriter2 = csv.DictWriter(
@@ -77,10 +80,16 @@ def normalization(tweet_list):
             normalized_tweet.append(normalized_text)
         return normalized_tweet
 
+analyser = SentimentIntensityAnalyzer()
+
 for tweet, p_tweet in zip(negative_tweets.items(1000), positive_tweets.items(1000)):
     # print(tweet.text)
     if tweet.lang == "en" and p_tweet.lang == "en":
         print(count)
+
+        # Sentiment analyzing
+        tweet_analyze = analyser.polarity_scores(tweet.full_text)
+        p_tweet_analyze = analyser.polarity_scores(p_tweet.full_text)
 
         # Removing punctuation
         tweet.full_text = form_sentence(tweet.full_text)
@@ -96,14 +105,13 @@ for tweet, p_tweet in zip(negative_tweets.items(1000), positive_tweets.items(100
 
         # Write a row to the CSV file. I use encode UTF-8
         # Cols: Created At, Tweets Array, Positive/Negative
-        csvWriter.writerow({'created_at': tweet.created_at, 'tweet_text': tweet.full_text, 'sentiment': 1})
+        csvWriter.writerow({'created_at': tweet.created_at, 'tweet_text': tweet.full_text, 'sentiment': 1, 'neg': tweet_analyze.get("neg"), 'neu': tweet_analyze.get("neu"), 'pos': tweet_analyze.get("pos"), 'compound': tweet_analyze.get("compound")})
         print("Negative",tweet.created_at, tweet.full_text)
-        csvWriter.writerow({'created_at': p_tweet.created_at, 'tweet_text': p_tweet.full_text, 'sentiment': 0})
+        csvWriter.writerow({'created_at': p_tweet.created_at, 'tweet_text': p_tweet.full_text, 'sentiment': 0, 'neg': p_tweet_analyze.get("neg"), 'neu': p_tweet_analyze.get("neu"), 'pos': p_tweet_analyze.get("pos"), 'compound': p_tweet_analyze.get("compound")})
         print("Positive", p_tweet.created_at, p_tweet.full_text)
         count = count + 1
 
 csvFile.close()
-
 
 for tweet, p_tweet in zip(negative_tweets.items(1000), positive_tweets.items(1000)):
     # print(tweet.text)
