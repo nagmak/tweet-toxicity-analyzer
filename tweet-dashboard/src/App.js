@@ -3,7 +3,8 @@ import './App.css';
 import 'bootstrap/dist/css/bootstrap.css';
 import '../src/components/app-bar/app-bar';
 import ButtonAppBar from '../src/components/app-bar/app-bar';
-import CenteredGrid from '../src/main/main'
+import MultilineTextFields from '../src/components/text-input/text-input';
+import TabPanel from '../src/components/tabs/tabs';
 
 function App() {
   return (
@@ -11,9 +12,7 @@ function App() {
       <header className="App-header" style={{ 'min-height': '0' }}>
         <ButtonAppBar></ButtonAppBar>
       </header>
-      <body>
-        <CenteredGrid></CenteredGrid>
-      </body>
+      <TabPanel></TabPanel>
     </div>
   );
 }
