@@ -34,11 +34,10 @@ auth.set_access_token(ACCESS_TOKEN, ACCESS_SECRET)
 # Create the api to connect to twitter with your creadentials
 api = tweepy.API(auth, wait_on_rate_limit=True, wait_on_rate_limit_notify=True, compression=True)
 
-negative_words = 'fuck OR bitch OR cunt OR dumb OR ugly OR useless OR ignored OR rumors OR spread OR teased OR crying OR bullying OR abuse OR hit OR neglect OR hate OR racist OR die OR kill OR hurt'
-positive_words = 'happy OR great OR good OR proud OR joy OR friends OR family OR confident OR love OR peace OR fine OR important'
+# Tweet query terms
+words = 'gamergate OR trump OR nfl OR weinstein OR canada OR women OR #WomenInTech OR tech OR code OR #ClimateChange'
 
-negative_words.replace(" ", "%20")
-positive_words.replace(" ", "%20")
+words.replace(" ", "%20")
 
 # Open/create a file to append data to
 csvFile = open('tweets.csv', 'a')
@@ -46,15 +45,14 @@ csvTestFile = open('test_tweets.csv', 'a')
 
 #Use csv writer
 csvWriter = csv.DictWriter(
-    csvFile, fieldnames=["created_at", "tweet_text", "sentiment", "neg", "neu", "pos", "compound"])
+    csvFile, fieldnames=["created_at", "tweet_text", "sentiment"])
 csvWriter.writeheader()
 
 csvWriter2 = csv.DictWriter(
     csvTestFile, fieldnames=["created_at", "tweet_text"])
 csvWriter2.writeheader()
 
-positive_tweets = tweepy.Cursor(api.search, q=positive_words, tweet_mode='extended', count=1000)
-negative_tweets = tweepy.Cursor(api.search, q=negative_words, tweet_mode='extended', count=1000)
+tweets = tweepy.Cursor(api.search, q=words, tweet_mode='extended', count=1000)
 api.home_timeline()
 count = 0
 
@@ -82,60 +80,61 @@ def normalization(tweet_list):
 
 analyser = SentimentIntensityAnalyzer()
 
-for tweet, p_tweet in zip(negative_tweets.items(1000), positive_tweets.items(1000)):
-    # print(tweet.text)
-    if tweet.lang == "en" and p_tweet.lang == "en":
+for tweet in tweets.items(1000):
+    print(tweet)
+    if tweet.lang == "en":
         print(count)
 
         # Sentiment analyzing
         tweet_analyze = analyser.polarity_scores(tweet.full_text)
-        p_tweet_analyze = analyser.polarity_scores(p_tweet.full_text)
 
         # Removing punctuation
         tweet.full_text = form_sentence(tweet.full_text)
-        p_tweet.full_text = form_sentence(p_tweet.full_text)
 
         # Removing stopwords: is, are, have - increases efficiency
         tweet.full_text = no_user_alpha(tweet.full_text)
-        p_tweet.full_text = no_user_alpha(p_tweet.full_text)
 
         # Normalizing
         tweet.full_text = normalization(tweet.full_text)
-        p_tweet.full_text = normalization(p_tweet.full_text)
 
-        # Write a row to the CSV file. I use encode UTF-8
-        # Cols: Created At, Tweets Array, Positive/Negative
-        csvWriter.writerow({'created_at': tweet.created_at, 'tweet_text': tweet.full_text, 'sentiment': 1, 'neg': tweet_analyze.get("neg"), 'neu': tweet_analyze.get("neu"), 'pos': tweet_analyze.get("pos"), 'compound': tweet_analyze.get("compound")})
-        print("Negative",tweet.created_at, tweet.full_text)
-        csvWriter.writerow({'created_at': p_tweet.created_at, 'tweet_text': p_tweet.full_text, 'sentiment': 0, 'neg': p_tweet_analyze.get("neg"), 'neu': p_tweet_analyze.get("neu"), 'pos': p_tweet_analyze.get("pos"), 'compound': p_tweet_analyze.get("compound")})
-        print("Positive", p_tweet.created_at, p_tweet.full_text)
+        # Determine if a tweet is negative, positive or neutral: -1, 1, 0
+        sentiment = 0
+        compound = tweet_analyze.get("compound")
+
+        if (compound >= 0.05):
+            sentiment = 1
+        elif (compound <= -0.05):
+            sentiment = -1
+        else:
+            sentiment = 0
+        
+        # Write a row to the CSV file
+        # Cols: Created At, Tweets Array, Positive/Negative/Neutral (1,-1,0)
+        csvWriter.writerow({'created_at': tweet.created_at, 'tweet_text': tweet.full_text, 'sentiment': sentiment})
+        print("Tweet", tweet.created_at, tweet.full_text, sentiment)
+
         count = count + 1
 
 csvFile.close()
 
-for tweet, p_tweet in zip(negative_tweets.items(1000), positive_tweets.items(1000)):
+for tweet in tweets.items(1000):
     # print(tweet.text)
-    if tweet.lang == "en" and p_tweet.lang == "en":
+    if tweet.lang == "en":
         print(count)
 
         # Removing punctuation
         tweet.full_text = form_sentence(tweet.full_text)
-        p_tweet.full_text = form_sentence(p_tweet.full_text)
 
         # Removing stopwords: is, are, have - increases efficiency
         tweet.full_text = no_user_alpha(tweet.full_text)
-        p_tweet.full_text = no_user_alpha(p_tweet.full_text)
 
         # Normalizing
         tweet.full_text = normalization(tweet.full_text)
-        p_tweet.full_text = normalization(p_tweet.full_text)
 
         # Write a row to the CSV file. I use encode UTF-8
         # Cols: Created At, Tweets Array, Positive/Negative
         csvWriter2.writerow({'created_at': tweet.created_at, 'tweet_text': tweet.full_text})
-        print("Negative",tweet.created_at, tweet.full_text)
-        csvWriter2.writerow({'created_at': p_tweet.created_at, 'tweet_text': p_tweet.full_text})
-        print("Positive", p_tweet.created_at, p_tweet.full_text)
+        print("Tweet", tweet.created_at, tweet.full_text)
         count = count + 1
 
 csvTestFile.close()
