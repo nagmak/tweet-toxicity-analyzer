@@ -45,7 +45,7 @@ csvTestFile = open('test_tweets.csv', 'a')
 
 #Use csv writer
 csvWriter = csv.DictWriter(
-    csvFile, fieldnames=["created_at", "tweet_text", "sentiment"])
+    csvFile, fieldnames=["created_at", "tweet_text", "sentiment", "typeofsentiment"])
 csvWriter.writeheader()
 
 csvWriter2 = csv.DictWriter(
