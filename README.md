@@ -21,6 +21,10 @@
 - Run `python3 Twitter_connection.py`
 - This will run do the data preprocessing and generate the tweet csv files
 
+### Set-up for Back-End APIs
+- Open a new Terminal window and cd into the `service` folder inside tweet-dashboard.
+- Run `python3 algorithms.py` to initialize the algorithms for the web application tweet analyzer to work
+
 #### Run Python/Flask Back-end
 - Open another terminal window for the Python/Flask back-end
 - Then cd into the `service` (run `cd service`) folder inside tweet-dashboard. This is where the flask app for the back-end web app api exists.
