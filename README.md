@@ -28,4 +28,4 @@
 ## To run Twitter Connection and Model Generator:
 
 ### Twitter Connection file (Twitter_connection.py)
-### Model Generator file (model_generator.ipynb)
+### Model Generator file (model_generator.ipynb) 
