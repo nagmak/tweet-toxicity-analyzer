@@ -16,6 +16,10 @@
 - Run `npm install `
 - Run `npm start` which should run the react front-end on `http://localhost:3000`
 
+### Set-up for Back-End APIs
+- Open a new Terminal window and cd into the `service` folder inside tweet-dashboard.
+- Run `python3 algorithms.py` to initialize the algorithms for the web application tweet analyzer to work
+
 ### Back-End:
 - Open another Terminal window for the Python/Flask back-end
 - Then cd into the `service` folder inside tweet-dashboard. This is where the flask app for the back-end web app api exists.

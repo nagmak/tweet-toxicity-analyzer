@@ -5,6 +5,10 @@ import Button from '@material-ui/core/Button';
 import axios from 'axios';
 import MySnackbarContentWrapper from '../snackbar/snackbar';
 import Snackbar from '@material-ui/core/Snackbar';
+import InputLabel from '@material-ui/core/InputLabel';
+import MenuItem from '@material-ui/core/MenuItem';
+import FormControl from '@material-ui/core/FormControl';
+import Select from '@material-ui/core/Select';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -12,6 +16,13 @@ const useStyles = makeStyles(theme => ({
       margin: theme.spacing(1),
       width: 600,
     },
+  },
+  formControl: {
+    margin: theme.spacing(1),
+    minWidth: 250,
+  },
+  selectEmpty: {
+    marginTop: theme.spacing(2),
   },
 }));
 
@@ -21,6 +32,7 @@ export default function MultilineTextFields() {
   const [successOpen, setSuccessOpen] = React.useState(false);
   const [warningOpen, setWarningOpen] = React.useState(false);
   var [msg, setMsg] = React.useState('Controlled');
+  const [algorithm, setAlgorithm] = React.useState('');
 
   var sentiment = ''
 
@@ -31,11 +43,13 @@ export default function MultilineTextFields() {
 
   const handleChangeTest = event => {
     console.log(event);
-    if (event) {
+    if (event && algorithm) {
       console.log(value);
+      console.log(algorithm);
       axios.get('http://localhost:5000/', {
         params: {
-          tweet: value
+          algorithm: algorithm,
+          tweet: value,
         },
         headers: {
           'Access-Control-Allow-Origin': true
@@ -44,31 +58,57 @@ export default function MultilineTextFields() {
       .then(res => {
         const sentiment_analyzed = res.data;
         console.log(sentiment_analyzed);
-        const compound = sentiment_analyzed.compound;
-
-        if (compound >= 0.05) {
-          sentiment = 'Positive'
-          msg = "Tweet Sentiment: " + sentiment + ". That sounds like a great tweet! Post away!"
-          setMsg(msg)
-          setSuccessOpen(true);
-
-        }
-        else if (compound <= -0.05) {
-          sentiment = 'Negative'
-          msg = "Tweet Sentiment: " + sentiment + ". This is quite a negative tweet. Are you sure you want to post it?"
-          setMsg(msg)
-          setWarningOpen(true);
-        }
-        else {
-          sentiment = 'Neutral'
-          msg = "Tweet Sentiment: " + sentiment + ". That sounds like a great tweet! Post away!"
-          setMsg(msg)
-          setSuccessOpen(true);
+        if (algorithm === 'vader') {
+          analyze_compound(sentiment_analyzed)
+        } else if (algorithm === 'svm' || algorithm === 'nb') {
+          analyze_svm_nb(sentiment_analyzed)
         }
 
       })
     }
   };
+
+  function analyze_svm_nb(sentiment_analyzed) {
+    if (sentiment_analyzed === 1) {
+      sentiment = 'Positive'
+      msg = "Tweet Sentiment: " + sentiment + ". That sounds like a great tweet! Post away!"
+      setMsg(msg)
+      setSuccessOpen(true);
+    } else if (sentiment_analyzed === 0) {
+      sentiment = 'Neutral'
+      msg = "Tweet Sentiment: " + sentiment + ". That sounds like a great tweet! Post away!"
+      setMsg(msg)
+      setSuccessOpen(true);
+    } else if (sentiment_analyzed === -1) {
+      sentiment = 'Negative'
+      msg = "Tweet Sentiment: " + sentiment + ". This is quite a negative tweet. Are you sure you want to post it?"
+      setMsg(msg)
+      setWarningOpen(true);
+    }
+  }
+
+  function analyze_compound(sentiment_analyzed) {
+    const compound = sentiment_analyzed.compound;
+
+    if (compound >= 0.05) {
+      sentiment = 'Positive'
+      msg = "Tweet Sentiment: " + sentiment + ". That sounds like a great tweet! Post away!"
+      setMsg(msg)
+      setSuccessOpen(true);
+    }
+    else if (compound <= -0.05) {
+      sentiment = 'Negative'
+      msg = "Tweet Sentiment: " + sentiment + ". This is quite a negative tweet. Are you sure you want to post it?"
+      setMsg(msg)
+      setWarningOpen(true);
+    }
+    else {
+      sentiment = 'Neutral'
+      msg = "Tweet Sentiment: " + sentiment + ". That sounds like a great tweet! Post away!"
+      setMsg(msg)
+      setSuccessOpen(true);
+    }
+  }
 
   const handleChangePost = event => {
     console.log(event.target.value);
@@ -84,6 +124,10 @@ export default function MultilineTextFields() {
 
   };
 
+  const handleSelectChange = event => {
+    setAlgorithm(event.target.value);
+  };
+
     return (
       <form className={classes.root} noValidate autoComplete="off">
         <div>
@@ -95,6 +139,19 @@ export default function MultilineTextFields() {
             multiline
             onChange={ setTextValue }
           />
+          <FormControl className={classes.formControl}>
+            <InputLabel id="select-label">Select An Algorithm</InputLabel>
+            <Select
+              labelId="select-label"
+              id="simple-select"
+              value={algorithm}
+              onChange={handleSelectChange}
+            >
+              <MenuItem value={'vader'}>VADER Sentiment</MenuItem>
+              <MenuItem value={'svm'}>Support Vector Machines</MenuItem>
+              <MenuItem value={'nb'}>Naive Bayes</MenuItem>
+            </Select>
+          </FormControl>          
           <Button variant="contained" onClick={ handleChangeTest }>Test</Button>
           <Button variant="contained" color="primary" onClick={ handleChangePost }>Post Tweet</Button>
           <Snackbar
