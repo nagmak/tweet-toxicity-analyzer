@@ -122,7 +122,6 @@ for tweet in tweets.items(1000):
 csvFile.close()
 
 for tweet in tweets.items(1000):
-    # print(tweet.text)
     if tweet.lang == "en":
         print(count)
 
