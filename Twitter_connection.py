@@ -99,18 +99,22 @@ for tweet in tweets.items(1000):
 
         # Determine if a tweet is negative, positive or neutral: -1, 1, 0
         sentiment = 0
+        typeofsentiment = ""
         compound = tweet_analyze.get("compound")
 
         if (compound >= 0.05):
             sentiment = 1
+            typeofsentiment = 'positive'
         elif (compound <= -0.05):
             sentiment = -1
+            typeofsentiment = 'negative'
         else:
             sentiment = 0
+            typeofsentiment = 'neutral'
         
         # Write a row to the CSV file
         # Cols: Created At, Tweets Array, Positive/Negative/Neutral (1,-1,0)
-        csvWriter.writerow({'created_at': tweet.created_at, 'tweet_text': tweet.full_text, 'sentiment': sentiment})
+        csvWriter.writerow({'created_at': tweet.created_at, 'tweet_text': tweet.full_text, 'sentiment': sentiment, 'typeofsentiment': typeofsentiment})
         print("Tweet", tweet.created_at, tweet.full_text, sentiment)
 
         count = count + 1
