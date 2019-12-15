@@ -31,7 +31,7 @@ CONSUMER_SECRET = 'X52EQX9pjVRTJJD5I5byQMcJiz3kznpbBWq6kGs9AOeC6wnW73'
 auth = tweepy.OAuthHandler(CONSUMER_KEY, CONSUMER_SECRET)
 auth.set_access_token(ACCESS_TOKEN, ACCESS_SECRET)
 
-# Create the api to connect to twitter with your creadentials
+# Create the api to connect to twitter with your credentials
 api = tweepy.API(auth, wait_on_rate_limit=True, wait_on_rate_limit_notify=True, compression=True)
 
 # Tweet query terms
@@ -99,18 +99,22 @@ for tweet in tweets.items(1000):
 
         # Determine if a tweet is negative, positive or neutral: -1, 1, 0
         sentiment = 0
+        typeofsentiment = ""
         compound = tweet_analyze.get("compound")
 
         if (compound >= 0.05):
             sentiment = 1
+            typeofsentiment = 'positive'
         elif (compound <= -0.05):
             sentiment = -1
+            typeofsentiment = 'negative'
         else:
             sentiment = 0
+            typeofsentiment = 'neutral'
         
         # Write a row to the CSV file
         # Cols: Created At, Tweets Array, Positive/Negative/Neutral (1,-1,0)
-        csvWriter.writerow({'created_at': tweet.created_at, 'tweet_text': tweet.full_text, 'sentiment': sentiment})
+        csvWriter.writerow({'created_at': tweet.created_at, 'tweet_text': tweet.full_text, 'sentiment': sentiment, 'typeofsentiment': typeofsentiment})
         print("Tweet", tweet.created_at, tweet.full_text, sentiment)
 
         count = count + 1
@@ -118,7 +122,6 @@ for tweet in tweets.items(1000):
 csvFile.close()
 
 for tweet in tweets.items(1000):
-    # print(tweet.text)
     if tweet.lang == "en":
         print(count)
 

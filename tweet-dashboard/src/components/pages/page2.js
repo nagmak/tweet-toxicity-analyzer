@@ -26,12 +26,6 @@ function Visualizations() {
           <Grid item xs={6}>
               <BarChartCard></BarChartCard>
           </Grid>
-          <Grid item xs={6}>
-              <PieChartCard></PieChartCard>
-          </Grid>
-          <Grid item xs={6}>
-              <BarChartCard></BarChartCard>
-          </Grid>
         </Grid>
       </div>
     );
