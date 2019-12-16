@@ -38,6 +38,15 @@
 - Run `npm install `
 - Run `npm start` which should run the react front-end on `http://localhost:3000`
 
+### USING THE TWEET ANALYZER
+1. Select the Tweet Analyzer tab on the web application
+2. Type a new tweet into the text field
+3. Select an Algorithm from the dropdown
+4. Click Test: returns a sentiment based on the tweet in a snackbar at the bottom of the page
+5. To test more tweets, repeat steps 2-4 for each tweet
+
+*TODO: Add POST Tweet functionality*
+
 ### To view our data analysis and algorithm results
 - Open `model_generator.ipynb` file
 - Run each cell
