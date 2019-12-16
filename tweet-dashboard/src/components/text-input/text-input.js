@@ -57,11 +57,10 @@ export default function MultilineTextFields() {
       })
       .then(res => {
         const sentiment_analyzed = res.data;
-        console.log(sentiment_analyzed);
         if (algorithm === 'vader') {
           analyze_compound(sentiment_analyzed)
         } else if (algorithm === 'svm' || algorithm === 'nb') {
-          analyze_svm_nb(sentiment_analyzed)
+          analyze_svm_nb(sentiment_analyzed[0])
         }
 
       })
@@ -112,6 +111,12 @@ export default function MultilineTextFields() {
 
   const handleChangePost = event => {
     console.log(event.target.value);
+    try {
+      const response = axios.post('http://localhost:5000/', event.target.value);
+      console.log('Returned data:', response);
+    } catch (e) {
+      console.log(`Axios request failed: ${e}`);
+    }
   };
 
   const handleClose = (event, reason) => {
