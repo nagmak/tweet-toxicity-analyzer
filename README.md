@@ -12,6 +12,7 @@
 
 ## Prerequisites 
 - Make sure that you have Node.js and Python3 installed
+- We have already generated data for this analysis within the `tweets.csv` and `test_tweets.csv` files, so no need to regenerate this.
 
 ## To run web application:
 

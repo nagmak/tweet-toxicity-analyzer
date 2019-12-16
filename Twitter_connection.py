@@ -52,7 +52,7 @@ csvWriter2 = csv.DictWriter(
     csvTestFile, fieldnames=["created_at", "tweet_text"])
 csvWriter2.writeheader()
 
-tweets = tweepy.Cursor(api.search, q=words, tweet_mode='extended', count=1000)
+tweets = tweepy.Cursor(api.search, q=words, tweet_mode='extended', count=10000)
 api.home_timeline()
 count = 0
 
@@ -80,7 +80,7 @@ def normalization(tweet_list):
 
 analyser = SentimentIntensityAnalyzer()
 
-for tweet in tweets.items(1000):
+for tweet in tweets.items(10000):
     print(tweet)
     if tweet.lang == "en":
         print(count)
@@ -121,7 +121,7 @@ for tweet in tweets.items(1000):
 
 csvFile.close()
 
-for tweet in tweets.items(1000):
+for tweet in tweets.items(10000):
     if tweet.lang == "en":
         print(count)
 
