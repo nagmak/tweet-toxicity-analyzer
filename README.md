@@ -12,16 +12,13 @@
 
 ## Prerequisites 
 - Make sure that you have Node.js and Python3 installed
+
+## Data
 - We have already generated data for this analysis within the `tweets.csv` and `test_tweets.csv` files, so no need to regenerate this.
 
 ## To run web application:
 
 ### STEP 1: Run Back-end
-#### Generate Data 
-- Open a terminal window in the project folder 
-- Run `python3 Twitter_connection.py`
-- This will run do the data preprocessing and generate the tweet csv files
-
 ### Set-up for Back-End APIs
 - Open a new Terminal window and cd into the `service` folder inside tweet-dashboard.
 - Run `python3 algorithms.py` to initialize the algorithms for the web application tweet analyzer to work
