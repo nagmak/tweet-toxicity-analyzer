@@ -7,20 +7,18 @@ from sklearn.feature_extraction.text import CountVectorizer, TfidfTransformer
 from sklearn.naive_bayes import MultinomialNB
 from sklearn.metrics import confusion_matrix, classification_report,accuracy_score, f1_score
 from sklearn.svm import LinearSVC
-from sklearn.linear_model import SGDClassifier
 from sklearn.model_selection import train_test_split
 
 # MACHINE LEARNING - TRAINING & ANALYSIS
 train_tweets_csv = pd.read_csv('../../tweets.csv')
 test_tweets_csv = pd.read_csv('../../test_tweets.csv')
+train_tweets_csv.head()
 
-train_tweets = train_tweets_csv[['tweet_text', 'sentiment']]
+train_tweets = train_tweets_csv[['tweet_text', 'sentiment', 'typeofsentiment']]
 test_tweets = test_tweets_csv[['tweet_text']]
 
 train_tweets['length'] = train_tweets['tweet_text'].apply(len)
-train_tweets['typeofsentiment'] = train_tweets['sentiment']
-
-train_tweets['sentiment'].value_counts().plot(kind='pie', autopct='%1.0f%%')
+temp = train_tweets['typeofsentiment']
 
 # MACHINE LEARNING - MODEL SELECTION
 X = train_tweets['tweet_text']
@@ -34,15 +32,9 @@ tw_train, tw_test, label_train, label_test = train_test_split(X, y, test_size = 
 pipe = Pipeline([
     ('vector', CountVectorizer()),
     ('tfidf', TfidfTransformer()),
-    ('clf', SGDClassifier(
-                    loss='hinge',
-                    penalty='l2',
-                    alpha=1e-3,
-                    random_state=42,
-                    max_iter=100,
-                    learning_rate='optimal',
-                    tol=None
-                ))
+    ('svm', LinearSVC(max_iter=100, 
+                        C=2.0
+                    ))
 ])
 
 pipe.fit(tw_train, label_train)
@@ -52,12 +44,11 @@ svm_predictions = pipe.predict(tw_test)
 classification_result = classification_report(svm_predictions,label_test)
 accuracy = accuracy_score(label_test, svm_predictions)
 
-
 # NAIVE BAYES - TRAINING
 pipe2 = Pipeline([
     ('vector', CountVectorizer()),
     ('tfidf', TfidfTransformer()),
-    ('classifier', MultinomialNB())
+    ('classifier', MultinomialNB(alpha=2.1))
 ])
 
 pipe2.fit(tw_train, label_train)
