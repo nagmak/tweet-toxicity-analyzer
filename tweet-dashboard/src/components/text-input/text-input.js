@@ -57,11 +57,10 @@ export default function MultilineTextFields() {
       })
       .then(res => {
         const sentiment_analyzed = res.data;
-        console.log(sentiment_analyzed);
         if (algorithm === 'vader') {
           analyze_compound(sentiment_analyzed)
         } else if (algorithm === 'svm' || algorithm === 'nb') {
-          analyze_svm_nb(sentiment_analyzed)
+          analyze_svm_nb(sentiment_analyzed[0])
         }
 
       })
