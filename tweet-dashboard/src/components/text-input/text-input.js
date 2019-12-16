@@ -111,12 +111,6 @@ export default function MultilineTextFields() {
 
   const handleChangePost = event => {
     console.log(event.target.value);
-    try {
-      const response = axios.post('http://localhost:5000/', event.target.value);
-      console.log('Returned data:', response);
-    } catch (e) {
-      console.log(`Axios request failed: ${e}`);
-    }
   };
 
   const handleClose = (event, reason) => {
