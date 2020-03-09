@@ -44,7 +44,15 @@ const useStyles = makeStyles(theme => ({
   root: {
     flexGrow: 1,
     backgroundColor: theme.palette.background.paper,
+    boxShadow: 'none',
+    marginTop: 24,
   },
+  label: {
+    color: "#FFF000",
+  },
+  indicator: {
+    backgroundColor: "#FFF",
+  }
 }));
 
 export default function SimpleTabs() {
@@ -58,11 +66,15 @@ export default function SimpleTabs() {
   return (
     <div className={classes.root}>
       <AppBar position="static">
-        <Tabs  value={value} onChange={handleChange} aria-label="simple tabs example">
-          <Tab label="About" {...a11yProps(0)} />
-          <Tab label="Visualizations" {...a11yProps(1)} />
-          <Tab label="Tweet Analyzer" {...a11yProps(2)} />
+        <Tabs  value={value} onChange={handleChange} aria-label="simple tabs example"
+        classes={{ indicator: classes.indicator }}>
+          <Tab label="About" {...a11yProps(0)} style={{ fontSize: '1.3em' }}/>
+          <Tab label="Visualizations" {...a11yProps(1)} style={{ fontSize: '1.3em' }}/>
+          <Tab label="Tweet Analyzer" {...a11yProps(2)} style={{ fontSize: '1.3em' }}/>
         </Tabs>
+        <Typography variant="h2" className={classes.title}>
+            Machine Learning: Abuse Prevention on Social Media
+        </Typography>
       </AppBar>
       <TabPanel value={value} index={0}>
         <About />

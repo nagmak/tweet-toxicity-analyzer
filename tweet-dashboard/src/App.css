@@ -1,5 +1,8 @@
 .App {
   text-align: center;
+  font-family: ButlerRegular;
+  font-weight: normal;
+  font-style: normal;
 }
 
 .App-logo {
@@ -19,4 +22,14 @@
 
 .App-link {
   color: #09d3ac;
+}
+
+.MuiPaper-root.MuiPaper-elevation4.MuiAppBar-root.MuiAppBar-positionStatic.MuiAppBar-colorPrimary {
+  background-color: white;
+  color: rgba(0, 0, 0, 0.87);
+  box-shadow: none;
+}
+
+button:not(:disabled), [type="button"]:not(:disabled), [type="reset"]:not(:disabled), [type="submit"]:not(:disabled) {
+  outline: none;
 }
