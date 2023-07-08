@@ -7,7 +7,7 @@ import algorithms
 from nltk.sentiment.vader import SentimentIntensityAnalyzer
 
 app = Flask(__name__)
-cors = CORS(app)
+CORS(app)
 app.config['CORS_HEADERS'] = 'Content-Type', 'Access-Control-Allow-Origin'
 
 @app.route('/', methods=['GET'])
@@ -17,7 +17,9 @@ def get_sentiment():
     tweet = request.args.get('tweet')
     print(tweet)
     print(algorithm)
-    return determine_algorithm(tweet, algorithm)
+    finalAlgo = determine_algorithm(tweet, algorithm)
+    # finalAlgo.headers.add('Access-Control-Allow-Origin', '*')
+    return finalAlgo
 
 def determine_algorithm(tweet, algorithm):
     if algorithm == 'vader':

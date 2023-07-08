@@ -46,14 +46,16 @@ export default function MultilineTextFields() {
     if (event && algorithm) {
       console.log(value);
       console.log(algorithm);
-      axios.get('http://localhost:5000/', {
+      axios.get('http://localhost:3100/', {
         params: {
           algorithm: algorithm,
           tweet: value,
         },
-        headers: {
-          'Access-Control-Allow-Origin': true
-        }, 
+        // headers: {
+        //   'Access-Control-Allow-Origin': '*',
+        //   'Access-Control-Allow-Methods': 'GET,PUT,POST,DELETE,PATCH,OPTIONS',
+        //   'Access-Control-Allow-Headers': "append,delete,entries,foreach,get,has,keys,set,values,Authorization",
+        // }, 
       })
       .then(res => {
         const sentiment_analyzed = res.data;

@@ -1,7 +1,6 @@
 import React from 'react';
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.css';
-import '../src/components/app-bar/app-bar';
 // import MultilineTextFields from '../src/components/text-input/text-input';
 import TabPanel from '../src/components/tabs/tabs';
 import { MuiThemeProvider, createMuiTheme } from "@material-ui/core/styles";
