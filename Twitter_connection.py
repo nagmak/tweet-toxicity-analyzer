@@ -21,10 +21,13 @@ from nltk.stem.wordnet import WordNetLemmatizer
 # Sentiment analyzer
 from nltk.sentiment.vader import SentimentIntensityAnalyzer
 
-ACCESS_TOKEN = '772178815414050816-KeN292eY2t0TDNC6h3EpK7VR1qIBKgK'
-ACCESS_SECRET = '1iohtKtnbAs3qHryyhgIHU2hLSaTofjx6bbq7jam698QZ'
-CONSUMER_KEY = '1SlOCtMrdZBdbKmhsPje5A3mQ'
-CONSUMER_SECRET = 'X52EQX9pjVRTJJD5I5byQMcJiz3kznpbBWq6kGs9AOeC6wnW73'
+import os
+path = os.environ["PATH"]
+
+ACCESS_TOKEN = os.environ.get("ACCESS_TOKEN")
+ACCESS_SECRET = os.environ.get("ACCESS_SECRET")
+CONSUMER_KEY = os.environ.get("CONSUMER_KEY")
+CONSUMER_SECRET = os.environ.get("CONSUMER_SECRET")
 
 # Setup tweepy to authenticate with Twitter credentials:
 
