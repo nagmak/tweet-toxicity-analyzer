@@ -1,11 +1,11 @@
 # Abuse Prevention Web Application
 ## Deborah Mepaiyeda & Nagma Kapoor (CPS803)
 
-![Positive](/public/Positive.png "Positive Tweet")
+![Positive](/tweet-dashboard/public/Positive.png "Positive Tweet")
 
-![Negative](/public/Negative.png "Negative Tweet")
+![Negative](/tweet-dashboard/public/Negative.png "Negative Tweet")
 
-![Neutral](/public/Neutral.png "Neutral Tweet")
+![Neutral](/tweet-dashboard/public/Neutral.png "Neutral Tweet")
 
 ## 3 sections in web application:
 
