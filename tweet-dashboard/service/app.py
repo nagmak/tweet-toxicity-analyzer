@@ -8,10 +8,10 @@ from nltk.sentiment.vader import SentimentIntensityAnalyzer
 
 app = Flask(__name__)
 CORS(app)
-app.config['CORS_HEADERS'] = 'Content-Type', 'Access-Control-Allow-Origin'
 
-@app.route('/', methods=['GET'])
-@cross_origin()
+@app.route('/', methods=['GET', 'OPTIONS'])
+@cross_origin(origin='*')
+
 def get_sentiment():
     algorithm = request.args.get('algorithm')
     tweet = request.args.get('tweet')
@@ -38,4 +38,5 @@ def determine_algorithm(tweet, algorithm):
         return jsonify(result)
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    # app.run(debug=True)
+    app.run(host="localhost", port=3100, debug=True)
